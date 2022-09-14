@@ -71,7 +71,18 @@ oc create clusterrolebinding registry-controller   --clusterrole=cluster-admin -
 ![image](https://user-images.githubusercontent.com/95764498/190273123-a7aba24b-da01-465d-b225-5ce720b128ec.png)
 
 15. create role , clusterrole, rolebinding, cluster role binding , configmaps and deployment for metricbeat (ref. metricbeat.yaml)
-16. 
+16. go to kibana dashboard, go to option>stackmangement>index pattern , create index pattern for metrcibeat index
+
+
+![image](https://user-images.githubusercontent.com/95764498/190276474-0f2df914-4bc3-4db0-b8ee-e67ff10a0ab6.png)
+
+
+17. go to option>discover , select created index pattern to see the data about K8s cluster metrics
+
+
+![image](https://user-images.githubusercontent.com/95764498/190276904-4e9fa016-f32b-47f9-ba4b-7cab9ed18961.png)
+
+
 
 
 
