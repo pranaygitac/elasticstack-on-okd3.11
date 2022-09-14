@@ -1,0 +1,138 @@
+#create a serviceaccount
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: kube-state-metrics
+  namespace: my-elastic #your-namespace-where-kube-state-metrics-will-deployed
+ 
+--- 
+#give it view privileges on specific namespaces (using roleBinding) (note: you can add this roleBinding to all the NS you want your serviceaccount to access)
+
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding 
+metadata:
+  name: kube-state-metrics
+  namespace: my-elastic #NS you want your serviceaccount to access
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: view
+subjects:
+  - kind: ServiceAccount
+    name: kube-state-metrics
+    namespace: my-elastic #your-namespace-where-kube-state-metrics-pod-will-deployed
+
+    
+----
+#then specify a set of namespaces (using the --namespaces option) and a set of kubernetes objects (using the --resources) that your serviceaccount has access to in the kube-state-metrics deployment configuration
+
+          
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: kube-state-metrics
+    deploymentconfig: kube-state-metrics
+  name: kube-state-metrics
+  namespace: my-elastic
+spec:
+  replicas: 1
+  selector:
+     matchLabels:
+       app: kube-state-metrics
+  template:
+    metadata:
+      labels:
+        app: kube-state-metrics
+    spec:
+      serviceAccountName: kube-state-metrics
+      containers:
+        - image: learninghub/kubestatemetrics:v1.0 #marketplace.gcr.io/google/kube-state-metrics1:1.9
+          imagePullPolicy: IfNotPresent
+          name: kube-state-metrics
+          ports:
+            - containerPort: 8080
+              protocol: TCP   
+          #args:
+          #  - '--resources=pods'
+          #  - '--namespaces=my-proj'              
+            
+            
+----
+#marketplace.gcr.io/google/kube-state-metrics1:1.9
+----
+#only use ClusterRoleBinding if deployment doesn't get created after using rolebinding
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding 
+metadata:
+  name: kube-state-metrics
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: kube-state-metrics
+subjects:
+  - kind: ServiceAccount
+    name: kube-state-metrics
+    namespace: my-elastic #your-namespace-where-kube-state-metrics-will-deployed
+----
+
+#only create cluster role if your going to use clusterrolebinding
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: kube-state-metrics
+rules:
+  - apiGroups:
+        - ""
+        - apps
+        - autoscaling
+        - batch
+        - extensions
+        - policy
+        - rbac.authorization.k8s.io
+    resources:
+      - pods
+      - secrets
+      - statefulsets
+      - cronjobs
+      - componentstatuses
+      - configmaps
+      - daemonsets
+      - deployments
+      - events
+      - endpoints
+      - horizontalpodautoscalers
+      - ingress
+      - jobs
+      - limitranges
+      - namespaces
+      - nodes
+      - pods
+      - persistentvolumes
+      - persistentvolumeclaims
+      - resourcequotas
+      - replicasets
+      - replicationcontrollers
+      - serviceaccounts
+      - services
+    verbs: ["get", "list", "watch"]
+    
+----
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: kube-state-metrics
+  name: kube-state-metrics
+  namespace: my-elastic
+spec:
+  ports:
+    - port: 8080
+      protocol: TCP
+      targetPort: 8080
+  selector:
+    app: kube-state-metrics
+  type: ClusterIP

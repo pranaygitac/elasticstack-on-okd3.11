@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: kibana
+    deploymentconfig: kibana
+  name: kibana
+  namespace: my-elastic
+spec:
+  replicas: 1
+  selector:
+     matchLabels:
+       app: kibana
+       deploymentconfig: kibana
+  template:
+    metadata:
+      labels:
+        app: kibana
+        deploymentconfig: kibana
+    spec:
+      containers:
+        - env:
+            - name: ELASTICSEARCH_USERNAME
+              value: elastic
+            - name: ELASTICSEARCH_HOSTS
+              value: 'http://elasticsearch:9200'
+            - name: ELASTICSEARCH_PASSWORD
+              value: '"12345678"'
+          image: kibana:7.17.6
+          imagePullPolicy: IfNotPresent
+          name: kibana
+          ports:
+            - containerPort: 5601
+              protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: kibana
+  name: kibana-nodeport
+  namespace: my-elastic
+spec:
+  ports:
+    - port: 5601
+      protocol: TCP
+      targetPort: 5601
+  selector:
+    app: kibana
+    deploymentconfig: kibana
+  type: NodePort

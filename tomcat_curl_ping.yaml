@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: tomcat
+  name: tomcat
+  namespace: my-proj
+spec:
+  replicas: 1
+  selector:
+     matchLabels:
+       app: tomcat
+       deploymentconfig: tomcat
+  template:
+    metadata:
+      labels:
+        app: tomcat
+        deploymentconfig: tomcat
+    spec:
+      containers:
+        - image: tomcat:8.0
+          imagePullPolicy: IfNotPresent
+          name: tomcat
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+	  initContainers:
+        - name: install
+          image: busybox:1.28
+          command: ['apt', 'install', 'curl', 'iputils-ping', '-y']
+    
+
+
+
+
+
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: tomcat
+  name: tomcat
+  namespace: my-proj
+spec:
+  replicas: 1
+  selector:
+     matchLabels:
+       app: tomcat
+  template:
+    metadata:
+      labels:
+        app: tomcat
+    spec:
+      containers:
+        - image: tomcat:8.0
+          imagePullPolicy: IfNotPresent
+          name: tomcat
+          command: ['apt', 'install', 'curl', 'iputils-ping', '-y']
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          

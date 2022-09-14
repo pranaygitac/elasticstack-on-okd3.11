@@ -1,0 +1,55 @@
+#apiVersion: apps.openshift.io/v1
+#kind: DeploymentConfig
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  labels:
+    component: elastic
+  name: elasticsearch
+  namespace: my-elastic # it should be same as your project name
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: elastic
+      StatefulSet: elasticsearch
+  template:
+    metadata:
+      labels:
+        component: elastic
+        StatefulSet: elasticsearch
+    spec:
+      containers:
+        - env:
+            - name: cluster.name
+              value: my-elastic-cluster
+            - name: discovery.type
+              value: single-node
+            - name: ES_JAVA_OPTS
+              value: '-Xms512m -Xmx512m'
+            - name: bootstrap.memory_lock
+              value: 'true'
+            - name: ELASTIC_PASSWORD
+              value: '12345678'
+            - name: xpack.security.enabled
+              value: 'true'
+            - name: network.host
+              value: '0.0.0.0'            
+          image: elasticsearch:7.17.6
+          imagePullPolicy: IfNotPresent
+          name: elasticsearch
+          ports:
+            - containerPort: 9200
+              protocol: TCP
+            - containerPort: 9300
+              protocol: TCP
+          volumeMounts:
+            -
+              mountPath: "/usr/share/elasticsearch/data"
+              name: "elasticsearch-data"  
+      restartPolicy: Always
+      volumes:
+        -
+          name: "elasticsearch-data"
+          persistentVolumeClaim:
+            claimName: "elasticsearch-pv" # it should be refer to storage you created in okd console 
