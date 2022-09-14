@@ -40,13 +40,13 @@ oc create clusterrolebinding registry-controller   --clusterrole=cluster-admin -
 
 
 8. create service for elasticsearch app by importing elasticsearch-service.yaml
-9. retrive clusterIP for elasticsearch service and fire command curl -u <elastic-user>:<elastic-password> -k http://<clusterIP-for-elasticsearch-service>:9200 to check elasticsearch cluster status
+9. retrive clusterIP for elasticsearch service and fire command curl -u [elastic-user]:[elastic-password] -k http://<clusterIP-for-elasticsearch-service>:9200 to check elasticsearch cluster status
    
    
 ![image](https://user-images.githubusercontent.com/95764498/190241982-93d76bec-4671-4f14-8d81-e42612a2435d.png)
 
 10. create kibana deployment and service by copying defination from kibana.yaml
-11. copy NodePort for kiban-nodeport and paste url in <systemIP>:<kiban-nodeport> fashion in browser to access kibana dashboard
+11. copy NodePort for kiban-nodeport and paste url in [systemIP]:[kiban-nodeport] fashion in browser to access kibana dashboard
    
    
 ![image](https://user-images.githubusercontent.com/95764498/190247174-7af04120-dc72-4555-8c67-0c6379df9aa7.png)
