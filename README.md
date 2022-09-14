@@ -40,7 +40,7 @@ oc create clusterrolebinding registry-controller   --clusterrole=cluster-admin -
 
 
 8. create service for elasticsearch app by importing elasticsearch-service.yaml
-9. retrive clusterIP for elasticsearch service and fire command curl -u [elastic-user]:[elastic-password] -k http://<clusterIP-for-elasticsearch-service>:9200 to check elasticsearch cluster status
+9. retrive clusterIP for elasticsearch service and fire command curl -u [elastic-user]:[elastic-password] -k http://[clusterIP-for-elasticsearch-service]:9200 to check elasticsearch cluster status
    
    
 ![image](https://user-images.githubusercontent.com/95764498/190241982-93d76bec-4671-4f14-8d81-e42612a2435d.png)
@@ -53,8 +53,25 @@ oc create clusterrolebinding registry-controller   --clusterrole=cluster-admin -
    
    
 ![image](https://user-images.githubusercontent.com/95764498/190251543-11e23ccb-7d19-42a7-a19d-34dd79ffe268.png)
+
+12. create service account "kube-state-metrics" (ref. kube-state-metrics.yaml)
+
+
+
+![image](https://user-images.githubusercontent.com/95764498/190254678-5a74f53e-f89c-4a81-ae23-53439280a406.png)
+
    
-   
+13. create cluserrole kube-state-metrics ,  (ref. kube-state-metrics.yaml).
+    now clusterrolebind service account "kube-state-metrics" with cluserrole "kube-state-metrics" of other namespaces you want to monitor
+    then create deployment and service for kube-state-metrics
+    
+14. create service account metricbeat and grant it privileged SCC (ref. metricbeat.yaml)
+
+
+![image](https://user-images.githubusercontent.com/95764498/190273123-a7aba24b-da01-465d-b225-5ce720b128ec.png)
+
+15. create role , clusterrole, rolebinding, cluster role binding , configmaps and deployment for metricbeat (ref. metricbeat.yaml)
+16. 
 
 
 
