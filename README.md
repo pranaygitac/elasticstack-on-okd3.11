@@ -33,7 +33,32 @@ oc create clusterrolebinding registry-controller   --clusterrole=cluster-admin -
 ![image](https://user-images.githubusercontent.com/95764498/190232899-b3793070-fe5e-4d29-9969-50a75dfd0201.png)
 
 
-5. create elasticsearch single node statefulset by pasting 
+7. create elasticsearch single node cluster by importing elasticsearch-StatefulSet.yaml
+
+
+![image](https://user-images.githubusercontent.com/95764498/190238423-0f4653e0-f9ce-4b3f-b5bf-bdbe15c4c151.png)
+
+
+8. create service for elasticsearch app by importing elasticsearch-service.yaml
+9. retrive clusterIP for elasticsearch service and fire command curl -u <elastic-user>:<elastic-password> -k http://<clusterIP-for-elasticsearch-service>:9200 to check elasticsearch cluster status
+   
+   
+![image](https://user-images.githubusercontent.com/95764498/190241982-93d76bec-4671-4f14-8d81-e42612a2435d.png)
+
+10. create kibana deployment and service by copying defination from kibana.yaml
+11. copy NodePort for kiban-nodeport and paste url in <systemIP>:<kiban-nodeport> fashion in browser to access kibana dashboard
+   
+   
+![image](https://user-images.githubusercontent.com/95764498/190247174-7af04120-dc72-4555-8c67-0c6379df9aa7.png)
+   
+   
+![image](https://user-images.githubusercontent.com/95764498/190251543-11e23ccb-7d19-42a7-a19d-34dd79ffe268.png)
+   
+   
+
+
+
+
 
 
 
