@@ -50,7 +50,7 @@ spec:
     spec:
       serviceAccountName: kube-state-metrics
       containers:
-        - image: learninghub/kubestatemetrics:v1.0 #marketplace.gcr.io/google/kube-state-metrics1:1.9
+        - image: learninghub/kubestatemetrics:v1.0 # download dockerfile from github repo to build latest version
           imagePullPolicy: IfNotPresent
           name: kube-state-metrics
           ports:
