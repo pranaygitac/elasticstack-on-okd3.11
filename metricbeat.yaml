@@ -162,7 +162,7 @@ spec:
         ]
         env:
         - name: ELASTICSEARCH_HOST
-          value: http://172.30.211.204
+          value: elasticsearch  #url fro ur elasticsearch host
         - name: ELASTICSEARCH_PORT
           value: "9200"
         - name: ELASTICSEARCH_USERNAME
